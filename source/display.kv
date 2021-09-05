@@ -1,0 +1,125 @@
+<WindowManager>
+    InputWindow:
+    DownloadWindow:
+
+
+<RoundedTextInput@TextInput>
+    border_radius: 15
+    canvas.before:
+        Color:
+            rgba: (0/255, 100/255, 255/255, 1)
+        Line:
+            rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
+            width: 1.05
+
+<RoundedLabel@Label>
+    border_radius: 18
+    canvas.before:
+        Color:
+            rgba: (240/255, 0/255, 255/255, 1)
+        Line:
+            rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
+            width: 1.05
+
+
+<RoundedButton@Button>
+    background_color: (0, 0, 0, 0)
+    background_normal: ""
+    border_radius: 55
+    border_color: (255/255, 113/255, 16/255, 1)
+    canvas.before:
+        Color:
+            rgba: self.border_color if self.state == "normal" else (1, 1, 1, 1)
+        Line:
+            rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
+            width: 1.05
+
+<Popup_Layout>:
+    cols: 1
+    popup_info: popup_info
+    Label:
+        id: popup_info
+        text: ""
+        size_hint: 0.4, 0.3
+        text_size: root.size
+        halign: "center"
+        valign: "bottom"
+        pos_hint: {"x": 0.3, "y":1}
+
+<InputWindow>
+    name: "InputWindow"
+
+    url_input: url_input
+    FloatLayout:
+        cols: 1
+        size: root.width, root.height
+        RoundedLabel:
+            pos_hint: {"x": 0.05, "y": 0.67}
+            size_hint: 0.2, 0.1
+            text: "Enter link"
+            color: (200/255, 0, 255/255, 1)
+
+        RoundedTextInput:
+            pos_hint: {"x": 0.3, "y": 0.7}
+            size_hint: 0.5, 0.04
+            id: url_input
+            background_color: (0, 0, 0, 1)
+            multiline: False
+
+        RoundedButton:
+            text: "download"
+            color: (255/255, 180/255, 6/255, 1)
+            pos_hint: {"x": 0.25, "y": 0.25}
+            size_hint: 0.5, 0.25
+            on_release:
+                app.root.current = "DownloadWindow"
+                root.download()
+
+        RoundedButton:
+            id: paste
+            text: "Paste"
+            border_color: (0, 255/255, 100/255, 1)
+            border_radius: 15
+            pos_hint: {"x":0.85, "y": 0.695}
+            size_hint: 0.1, 0.05
+            on_release: root.paste_clipboard()
+
+<DownloadWindow>
+    name: "DownloadWindow"
+    progress_label: progress_label
+    download_progress: download_progress
+    video_info: video_info
+
+    FloatLayout:
+        cols: 1
+        size: root.width, root.height
+
+        RoundedButton:
+            text: "Cancel"
+            border_color: (255/255, 0, 0, 1)
+            border_radius: 15
+            pos_hint: {"x": 0.39, "y": 0.1}
+            size_hint: 0.2, 0.05
+            on_release:
+                root.dirty_exit()
+
+        Label:
+            id: progress_label
+            text: "Downloading..."
+            pos_hint: {"x":0.44, "y":0.6}
+            size_hint: 0.1, 0.1
+
+        Label:
+            id: video_info
+            text: ""
+            text_size: root.width-3, None
+            size_hint: 0.1, 0.1
+            pos_hint: {"x":0.44, "y": 0.2}
+            halign: "center"
+
+        ProgressBar:
+            id: download_progress
+            min: 0
+            max: 2
+            pos_hint: {"x": 0.1}
+            size_hint_x: 0.8
