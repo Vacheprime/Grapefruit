@@ -277,4 +277,7 @@ class Main(App):
     def on_resume(self):
         pass
 
+    def on_stop(self):
+	cleanup()
+
 Main().run()
